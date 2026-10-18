@@ -1,0 +1,298 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropSense | Crop Health Intelligence</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="brand">
+        <span class="brand-icon">✳</span>
+        <span>
+            Crop<span class="brand-green">Sense</span>
+            <small>CROP HEALTH INTELLIGENCE</small>
+        </span>
+    </a>
+
+    <nav>
+        <a href="#how-it-works">How it works</a>
+        <a href="#disease-guide">Disease guide</a>
+        <a href="#scanner" class="nav-button">Analyze a leaf ↗</a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">
+                <span class="status-dot"></span>
+                AI-POWERED CROP MONITORING
+            </span>
+
+            <h1>Healthier crops<br>start with <span>better insight.</span></h1>
+
+            <p>
+                Identify potential rice leaf diseases with machine learning.
+                Upload a leaf image to get a model prediction and explore the next steps.
+            </p>
+
+            <a href="#scanner" class="primary-button">
+                Analyze your crop <span>→</span>
+            </a>
+
+            <div class="trust-note">
+                ✦ &nbsp; Image-based analysis &nbsp; · &nbsp; Rice leaf classification
+            </div>
+        </div>
+
+        <div class="hero-art">
+            <div class="hero-message">
+                <span class="hero-leaf-icon">✳</span>
+                <h2>Smart crop health analysis</h2>
+                <p>Upload a rice leaf image and let the trained ML model analyze it.</p>
+                <a href="#scanner" class="hero-text-link">Try the scanner →</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div><strong>10</strong><span>Rice leaf classes</span></div>
+        <div><strong>AI</strong><span>Image classification</span></div>
+        <div><strong>224 × 224</strong><span>Model input resolution</span></div>
+    </section>
+
+    <section class="scanner-section" id="scanner">
+        <div class="section-heading">
+            <span class="eyebrow">CROP HEALTH SCANNER</span>
+            <h2>Let's examine your leaf.</h2>
+            <p>Upload a clear rice leaf photo to generate a prediction.</p>
+        </div>
+
+        <div class="scanner-grid">
+            <form class="upload-card" method="POST" enctype="multipart/form-data">
+                <div class="card-title">
+                    <div>
+                        <span class="step-label">STEP 01</span>
+                        <h3>Upload leaf image</h3>
+                    </div>
+                    <span class="upload-icon">↑</span>
+                </div>
+
+                <label for="leaf-image" class="drop-zone" id="drop-zone">
+                    <img id="image-preview" alt="Selected rice leaf preview" hidden>
+
+                    <div id="upload-placeholder">
+                        <span class="upload-cloud">↑</span>
+                        <strong>Drop your image here</strong>
+                        <span>or <u>browse files</u></span>
+                        <small>JPG, JPEG or PNG · Maximum 10 MB</small>
+                    </div>
+                </label>
+
+                <input
+                    type="file"
+                    id="leaf-image"
+                    name="leaf_image"
+                    accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                    required
+                    hidden
+                >
+
+                <button type="submit" class="primary-button analyze-button">
+                    Analyze leaf <span>→</span>
+                </button>
+
+                <p class="privacy-note">Use a clear, well-lit photo of a rice leaf.</p>
+            </form>
+
+            <div class="result-card">
+                <div class="card-title">
+                    <div>
+                        <span class="step-label">STEP 02</span>
+                        <h3>Analysis result</h3>
+                    </div>
+                    <span class="result-icon">✳</span>
+                </div>
+
+                {% if result %}
+                <div class="result-content">
+                    <span class="result-label">MODEL PREDICTION</span>
+                    <h2>{{ result.disease }}</h2>
+
+                    <div class="confidence-row">
+                        <span>Model confidence</span>
+                        <strong>{{ result.confidence }}%</strong>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: {{ result.confidence }}%"></div>
+                    </div>
+
+                    <p class="result-disclaimer">
+                        Confidence is the model's score for its selected class,
+                        not a guarantee of diagnosis.
+                    </p>
+
+                    <div class="guidance">
+                        <strong>Recommended next step</strong>
+                        <p>
+                            Inspect the leaf closely and compare its symptoms with
+                            trusted agricultural guidance. Seek local agricultural
+                            expert advice before applying treatment.
+                        </p>
+                    </div>
+                </div>
+
+                {% elif error %}
+                <div class="empty-result">
+                    <span class="empty-icon">!</span>
+                    <h3>Unable to analyze</h3>
+                    <p>{{ error }}</p>
+                </div>
+
+                {% else %}
+                <div class="empty-result">
+                    <span class="empty-icon">✳</span>
+                    <h3>Your results will appear here</h3>
+                    <p>
+                        Upload a rice leaf image and select "Analyze leaf"
+                        to see the model's prediction.
+                    </p>
+
+                    <div class="result-placeholder">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="info-section" id="how-it-works">
+        <div class="section-heading">
+            <span class="eyebrow">SIMPLE. PRACTICAL. INSIGHTFUL.</span>
+            <h2>From leaf photo to insight.</h2>
+        </div>
+
+        <div class="feature-grid">
+            <article class="feature-card">
+                <span>01</span>
+                <h3>Upload</h3>
+                <p>Choose a clear image of a rice leaf showing the area you want to examine.</p>
+            </article>
+
+            <article class="feature-card">
+                <span>02</span>
+                <h3>Analyze</h3>
+                <p>The trained MobileNetV2 model compares the image with its learned disease classes.</p>
+            </article>
+
+            <article class="feature-card">
+                <span>03</span>
+                <h3>Take action</h3>
+                <p>Use the prediction as an initial clue and verify symptoms before making crop-care decisions.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="disease-section" id="disease-guide">
+        <span class="eyebrow">BUILT FOR RICE LEAF CLASSIFICATION</span>
+        <h2>Ten classes. One starting point.</h2>
+
+        <p>
+            The model was trained to choose among these dataset categories.
+            Predictions may be wrong, especially for unclear images or other plant species.
+        </p>
+
+        <div class="disease-tags">
+            <span>Bacterial leaf blight</span>
+            <span>Bacterial leaf streak</span>
+            <span>Bacterial panicle blight</span>
+            <span>Blast</span>
+            <span>Brown spot</span>
+            <span>Dead heart</span>
+            <span>Downy mildew</span>
+            <span>Hispa</span>
+            <span>Normal</span>
+            <span>Tungro</span>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <a href="/" class="footer-brand">✳ CropSense</a>
+    <p>Machine-learning-assisted rice leaf classification.</p>
+    <small>For educational and decision-support use. Not a substitute for expert diagnosis.</small>
+</footer>
+
+<script>
+const input = document.getElementById("leaf-image");
+const preview = document.getElementById("image-preview");
+const placeholder = document.getElementById("upload-placeholder");
+const dropZone = document.getElementById("drop-zone");
+
+function handleFile(file) {
+    if (!file) return;
+
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
+        alert("Please choose a JPG or PNG image.");
+        input.value = "";
+        preview.hidden = true;
+        preview.removeAttribute("src");
+        placeholder.hidden = false;
+        return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+        alert("Image must be smaller than 10 MB.");
+        input.value = "";
+        preview.hidden = true;
+        preview.removeAttribute("src");
+        placeholder.hidden = false;
+        return;
+    }
+
+    preview.src = URL.createObjectURL(file);
+    preview.hidden = false;
+    placeholder.hidden = true;
+}
+
+input.addEventListener("change", () => {
+    handleFile(input.files[0]);
+});
+
+dropZone.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    dropZone.classList.add("dragging");
+});
+
+dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("dragging");
+});
+
+dropZone.addEventListener("drop", (event) => {
+    event.preventDefault();
+    dropZone.classList.remove("dragging");
+
+    const files = event.dataTransfer.files;
+
+    if (files.length > 0) {
+        const transfer = new DataTransfer();
+        transfer.items.add(files[0]);
+        input.files = transfer.files;
+        handleFile(files[0]);
+    }
+});
+</script>
+
+</body>
+</html>
+```
